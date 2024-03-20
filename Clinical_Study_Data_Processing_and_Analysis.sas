@@ -1,7 +1,19 @@
+|**********************************************************************;
+* Project           : Clinical Study Data Processing and Analysis with SAS,Study1
+*
+* Program name      : Clinical_Study_Data_Processing_and_Analysis.sas
+*
+* Author            : dpat26
+*
+* Date created      : 20240320
+*
+* Purpose           : Processing and analyzing clinical study data.
+|**********************************************************************;
+
 * turn on note messages in the log;
 options notes; 
 
-*5 Create user defined formats;
+/* Create user defined formats */
 proc format;
   value sex 
   1 = 'Female'
@@ -20,8 +32,8 @@ run;
 data study; /*Create a data set called study*/
   * 1 Read in the data;
   infile "/home/u63743031/my_shared_file_links/justina.flavin/c_629/suppTRP-1062.txt" MISSOVER dsd; /*dlm=',' can be used*/
-  input Site:		    $1. 
-  		Pt:				$2.
+  input         Site:	   $1. 
+  		Pt:	   $2.
   		Sex	
   		Race
   		Dosedate:  mmddyy10. /*read in with informat*/
@@ -32,6 +44,7 @@ data study; /*Create a data set called study*/
   		Result3
   		;
   format Dosedate mmddyy10.; /*apply format */
+  
   * 2 Create a new variable called Doselot;
   
   /*Using logical comparison operators to create conditional statements*/
@@ -43,19 +56,20 @@ data study; /*Create a data set called study*/
   if Dosedate gt '10JAN1998'd then doselot= 'P0526'; else
   if Dosedate = "" then doselot = '';
 
-  
   * 3 Create two new variables called prot_amend and limit;
 
  /*Set prot_amend and limit based on the conditions provided based on the Sex*/	
   if doselot= 'P0526' then do;
    	prot_amend = 'B';
   	if Sex = 1 then limit = '0.03';
-  	if Sex = 2 then limit = '0.02';
+  	else if Sex = 2 then limit = '0.02';
   end;
   
-  /*prot_amend = 'A'; */
-  if doselot ^="" or doselot ^='P0526' then prot_amend ='A';
-  if doselot= 'S0576' or doselot= 'P1122' then limit = '0.02';
+  else if doselot = 'S0576' then do;
+  	prot_amend = 'A';
+  	limit = 0.02;
+  end;
+  
   * 4 Create a new variable called site_name;
   length site_name $30.; /*add max length or arbitrary length to ensure no truncation*/ 
   select(site);
@@ -66,13 +80,10 @@ data study; /*Create a data set called study*/
   end;
  
    * 5 Apply formats;
-  *format;
-/* Multiple options when applying formats. We tested out various options */
-/* Also learned using not missing options when working with numeric variables */
+  /*applied in the beginning*/
 /*   	if not missing(sex) then sex = put(sex, $sex.); */
 /*   	if not missing(race) then race = put(race, $race.); */
   	/* Use if not missing to address missing . race value */
-
   	
   format sex sex. race race.; /* another method Apply formats for sex and race column based on Proc Format prior to code*/
 
@@ -86,11 +97,4 @@ data study; /*Create a data set called study*/
   		limit = 'Lower Limit of Detection'
   		site_name = 'Site Name'
   		;
-  		
-/*  General items practiced use Retain to align variable in output dataset */
-/*  retain Pt Site site_name Dosedate doselot prot_amd limit; */
-/* 	Tested drop options */
-/* 	drop site_name; */
-/* Or use keep */
-/* 	keep Site Pt site_name; */
 run;
