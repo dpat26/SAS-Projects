@@ -68,7 +68,7 @@ data study; /*Create a data set called study*/
    * 5 Apply formats;
   *format;
 /* Multiple options when applying formats. We tested out various options */
-/* Also learrned using not missing options when working with numeric variables */
+/* Also learned using not missing options when working with numeric variables */
 /*   	if not missing(sex) then sex = put(sex, $sex.); */
 /*   	if not missing(race) then race = put(race, $race.); */
   	/* Use if not missing to address missing . race value */
