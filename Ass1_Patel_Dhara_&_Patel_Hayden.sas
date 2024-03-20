@@ -78,12 +78,6 @@ data study; /*Create a data set called study*/
 /*   	if not missing(race) then race = put(race, $race.); */
   	/* Use if not missing to address missing . race value */
 
-/* We made multiple attempts to address the warning without any solution*/
-/* Reviewed proc format paper on LexJansen website and figured out not to use $ 
-		sign when assigning format to numeric variable*/
-/*  WARNING: Variable Sex has already been defined as numeric. */
-/*  WARNING: Variable Race has already been defined as numeric. */
-/* Realised not to add $sex. char format value using $ sign */ 
   	
   format sex sex. race race.; /* another method Apply formats for sex and race column based on Proc Format prior to code*/
 
