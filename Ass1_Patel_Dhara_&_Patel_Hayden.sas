@@ -1,8 +1,3 @@
-/* Programming Assignment 1  
-   Use this template to help you complete the assignment by filling in the missing code.
-   Some blank lines indicate that one or more statements is needed, others are white space to improve readability. 
-   Name your completed program Ass1_lastname_firstname.sas  */
-
 * turn on note messages in the log;
 options notes; 
 
